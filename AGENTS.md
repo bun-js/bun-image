@@ -6,6 +6,10 @@ alwaysApply: false
 
 Default to using Bun instead of Node.js.
 
+## Project dependencies
+
+Keep this project at zero external dependencies. Prefer Bun's built-in runtime APIs and standard library; do not add third-party runtime or development packages unless the user explicitly approves an exception.
+
 - Use `bun <file>` instead of `node <file>` or `ts-node <file>`
 - Use `bun test` instead of `jest` or `vitest`
 - Use `bun build <file.html|file.ts|file.css>` instead of `webpack` or `esbuild`
@@ -21,6 +25,7 @@ Default to using Bun instead of Node.js.
 - `Bun.redis` for Redis. Don't use `ioredis`.
 - `Bun.sql` for Postgres. Don't use `pg` or `postgres.js`.
 - `WebSocket` is built-in. Don't use `ws`.
+- Use `import { parseArgs } from "node:util"` for CLI argument parsing. Don't add a third-party argument parser.
 - Prefer `Bun.file` over `node:fs`'s readFile/writeFile
 - Bun.$`ls` instead of execa.
 

@@ -1,10 +1,11 @@
 {
-  "module": "src/index.ts",
+  "name": "bun-image",
+  "version": "0.0.0",
   "type": "module",
+  "module": "src/index.ts",
+  "bin": { "bun-image": "src/index.ts" },
+  "scripts": { "test": "bun test", "typecheck": "tsc --noEmit" },
   "devDependencies": {
     "@types/bun": "^1.3.14"
-  },
-  "name": "bun-image",
-  "version": "0.0.0"
-
+  }
 }
