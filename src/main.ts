@@ -34,7 +34,7 @@ export async function main() {
     else if (args.terminal === "dataurl")
       await writeText(
         args.output,
-        `${(format ? applyFormat(image, format, args.quality) : image).dataurl()}\n`,
+        `${await (format ? applyFormat(image, format, args.quality) : image).dataurl()}\n`,
       )
     else {
       if (args.output === "-" && !format)
