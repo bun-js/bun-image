@@ -15,7 +15,14 @@ describe("parseArguments", () => {
   })
   test("accepts negative numeric option values", () => {
     expect(
-      parseArguments(["in.jpg", "--rotate", "-90", "--brightness", "-0.5", "out.webp"]).operations,
+      parseArguments([
+        "in.jpg",
+        "--rotate",
+        "-90",
+        "--brightness",
+        "-0.5",
+        "out.webp",
+      ]).operations,
     ).toEqual([
       { kind: "rotate", degrees: -90 },
       { kind: "modulate", brightness: -0.5 },
@@ -73,9 +80,9 @@ describe("parseArguments", () => {
     expect(() => parseArguments(["in.jpg", "--unknown", "out.png"])).toThrow(
       "unsupported option",
     )
-    expect(() => parseArguments(["in.jpg", "--rotate", "13", "out.png"])).toThrow(
-      "multiple of 90",
-    )
+    expect(() =>
+      parseArguments(["in.jpg", "--rotate", "13", "out.png"]),
+    ).toThrow("multiple of 90")
     expect(() => parseArguments(["in.jpg", "--quality"])).toThrow(
       "--quality requires a value",
     )

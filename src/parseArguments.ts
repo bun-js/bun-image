@@ -9,7 +9,13 @@ export function parseArguments(argv: string[]): Arguments {
   if (argv.length === 0 || argv.includes("--help"))
     throw new Error("Usage: bun-image [options] input output")
 
-  const parsed = parseArgs({ args: argv, options: parseArgsOptions, allowPositionals: true, tokens: true, strict: false })
+  const parsed = parseArgs({
+    args: argv,
+    options: parseArgsOptions,
+    allowPositionals: true,
+    tokens: true,
+    strict: false,
+  })
 
   const state = createOptionState()
 
