@@ -31,6 +31,20 @@ describe("parseArguments", () => {
   test("accepts dash as a terminal destination", () => {
     expect(parseArguments(["in.png", "--metadata", "-"]).output).toBe("-")
   })
+  test("rejects values attached to boolean options", () => {
+    for (const option of [
+      "clipboard",
+      "metadata",
+      "placeholder",
+      "base64",
+      "dataurl",
+      "flip",
+      "flop",
+    ])
+      expect(() =>
+        parseArguments(["in.png", `--${option}=false`, "out.png"]),
+      ).toThrow(`--${option} does not accept a value`)
+  })
   test("parses all scalar and terminal options", () => {
     const args = parseArguments([
       "--clipboard",

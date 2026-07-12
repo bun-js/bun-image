@@ -1,14 +1,14 @@
 import { type Arguments, type OutputFormat, outputFormats } from "../types"
 import { number } from "../utils/number"
-import type { OptionName } from "./options"
+import { parseArgsOptions, type OptionName } from "./options"
 import { parseResize } from "./parseResize"
 
 type OptionState = Pick<
   Arguments,
   "operations" | "format" | "quality" | "terminal" | "clipboard"
 >
-type OptionToken = { name: OptionName; value?: string | boolean }
 type ParsedOptionToken = { name: string; value?: string | boolean }
+type OptionToken = ParsedOptionToken & { name: OptionName }
 type Handler = (state: OptionState, token: OptionToken) => void
 
 const handlers: Record<OptionName, Handler> = {
@@ -54,9 +54,15 @@ export function applyOptionToken(
   state: OptionState,
   token: ParsedOptionToken,
 ): void {
-  const handler = handlers[token.name as OptionName]
-  if (!handler) throw new Error(`unsupported option: --${token.name}`)
-  handler(state, token as OptionToken)
+  const { name } = token
+  if (!isOptionName(name)) throw new Error(`unsupported option: --${name}`)
+  if (parseArgsOptions[name].type === "boolean" && token.value !== undefined)
+    throw new Error(`--${name} does not accept a value`)
+  handlers[name](state, { ...token, name })
+}
+
+function isOptionName(name: string): name is OptionName {
+  return Object.hasOwn(parseArgsOptions, name)
 }
 
 function tokenValue(token: OptionToken): string {
