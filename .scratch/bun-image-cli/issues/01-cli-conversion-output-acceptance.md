@@ -4,11 +4,11 @@
 
 **Blocked by:** None — can start immediately
 
-**Status:** in-progress
+**Status:** completed
 
 - [x] Verify numeric resize and representative explicit WebP conversion through the process boundary.
 - [x] Verify rotation, flip, flop, brightness, saturation, and quality behavior.
-- [ ] Verify explicit PNG, HEIC, and AVIF selection where available.
+- [x] Verify explicit PNG, HEIC, and AVIF selection where available.
 - [x] Verify output-format inference for JPEG and explicit WebP selection.
 - [x] Verify metadata and data-URL terminal outputs to stdout.
 - [x] Verify placeholder and Base64 terminal outputs to files.

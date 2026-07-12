@@ -106,6 +106,20 @@ test("CLI emits placeholder and Base64 terminal output to files", async () => {
   }
 })
 
+test("CLI encodes every supported explicit output format", async () => {
+  await setup()
+  try {
+    for (const format of ["png", "jpeg", "webp", "heic", "avif"] as const) {
+      const output = `${root}/explicit.${format}`
+      const result = await run(input, "--format", format, output)
+      expect(result.exitCode).toBe(0)
+      expect(await Bun.file(output).exists()).toBe(true)
+    }
+  } finally {
+    await cleanup()
+  }
+})
+
 test("CLI reports invalid arguments through stderr and a nonzero exit", () => {
   const result = Bun.spawnSync([
     "bun",
