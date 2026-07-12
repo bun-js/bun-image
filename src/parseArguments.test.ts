@@ -13,6 +13,14 @@ describe("parseArguments", () => {
       parseArguments(["in.jpg", "--resize", "100", "out.webp"]).operations,
     ).toEqual([{ kind: "resize", width: 100, height: undefined }])
   })
+  test("accepts negative numeric option values", () => {
+    expect(
+      parseArguments(["in.jpg", "--rotate", "-90", "--brightness", "-0.5", "out.webp"]).operations,
+    ).toEqual([
+      { kind: "rotate", degrees: -90 },
+      { kind: "modulate", brightness: -0.5 },
+    ])
+  })
   test("accepts dash as a terminal destination", () => {
     expect(parseArguments(["in.png", "--metadata", "-"]).output).toBe("-")
   })
@@ -67,6 +75,9 @@ describe("parseArguments", () => {
     )
     expect(() => parseArguments(["in.jpg", "--rotate", "13", "out.png"])).toThrow(
       "multiple of 90",
+    )
+    expect(() => parseArguments(["in.jpg", "--quality"])).toThrow(
+      "--quality requires a value",
     )
   })
 })
