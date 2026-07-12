@@ -3,6 +3,5 @@ onlyFailures = true
 coverageSkipTestFiles = true
 coverage = true
 coverageThreshold = 1.0
-coveragePathIgnorePatterns = ["src/main.ts"]
 [test.reporter]
 dots = true
