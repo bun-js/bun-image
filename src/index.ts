@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
-import { applyFormat, outputFormat } from "./format";
 import { type Operation, parseArguments } from "./parse";
+import { applyFormat, outputFormat } from "./utils/format";
+import { writeBytes, writeText } from "./utils/output";
 
 function apply(image: Bun.Image, operation: Operation): Bun.Image {
   switch (operation.kind) {
@@ -67,13 +68,6 @@ async function main() {
     );
     process.exitCode = 1;
   }
-}
-async function writeText(destination: string, value: string) {
-  if (destination === "-") process.stdout.write(value);
-  else await Bun.write(destination, value);
-}
-async function writeBytes(bytes: Promise<Uint8Array>) {
-  process.stdout.write(await bytes);
 }
 if (import.meta.main) await main();
 

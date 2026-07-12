@@ -1,4 +1,4 @@
-import type { OutputFormat } from "./format";
+import type { OutputFormat } from "./utils/format";
 
 export type Operation =
   | { kind: "resize"; width: number; height?: number }
