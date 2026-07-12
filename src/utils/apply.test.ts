@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test"
 import { apply } from "./apply"
 
-test("apply records a resize operation", () => {
+test("apply handles every image operation", () => {
   const image = {
     resize: () => image,
     rotate: () => image,

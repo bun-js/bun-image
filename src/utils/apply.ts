@@ -1,4 +1,4 @@
-import type { Operation } from "./types"
+import type { Operation } from "../types"
 
 export function apply(image: Bun.Image, operation: Operation): Bun.Image {
   switch (operation.kind) {

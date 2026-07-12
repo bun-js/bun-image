@@ -1,6 +1,6 @@
 /* c8 ignore file */
-import { apply } from "./apply"
 import { parseArguments } from "./parseArguments"
+import { apply } from "./utils/apply"
 import { applyFormat } from "./utils/applyFormat"
 import { outputFormat } from "./utils/outputFormat"
 import { writeBytes } from "./utils/writeBytes"

@@ -1,5 +1,5 @@
-import { number } from "./number"
 import type { Arguments, Operation, OutputFormat } from "./types"
+import { number } from "./utils/number"
 
 export type { Arguments } from "./types"
 
