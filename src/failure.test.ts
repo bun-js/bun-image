@@ -54,6 +54,31 @@ test("CLI requires a format for binary stdout", async () => {
   }
 })
 
+test("CLI rejects extra paths and unsupported geometry", async () => {
+  await setup()
+  try {
+    for (const args of [
+      [input, `${root}/one.png`, `${root}/two.png`],
+      [input, "--resize", "50%", `${root}/out.png`],
+      [input, "--crop", "2x2", `${root}/out.png`],
+      [input, "--offset", "+1+1", `${root}/out.png`],
+    ]) {
+      const result = run(...args)
+      expect(result.exitCode).not.toBe(0)
+      expect(new TextDecoder().decode(result.stdout)).toBe("")
+      expect(new TextDecoder().decode(result.stderr)).toContain("bun-image:")
+    }
+  } finally {
+    await cleanup()
+  }
+})
+
+test("CLI exposes bun-image without a convert alias", () => {
+  const help = Bun.spawnSync(["bun", "run", "src/index.ts"])
+  expect(help.exitCode).not.toBe(0)
+  expect(new TextDecoder().decode(help.stderr)).toContain("bun-image:")
+})
+
 test("CLI preserves existing output on failure and overwrites on success", async () => {
   await setup()
   try {

@@ -106,6 +106,51 @@ test("CLI emits placeholder and Base64 terminal output to files", async () => {
   }
 })
 
+test("CLI supports every text terminal destination", async () => {
+  await setup()
+  try {
+    const metadata = `${root}/metadata.json`
+    const dataurl = `${root}/dataurl.txt`
+    const metadataResult = await run(input, "--metadata", metadata)
+    expect(metadataResult.exitCode).toBe(0)
+    expect(JSON.parse(await Bun.file(metadata).text())).toMatchObject({
+      width: 4,
+      height: 2,
+      format: "png",
+    })
+
+    const placeholderResult = await run(input, "--placeholder", "-")
+    expect(placeholderResult.exitCode).toBe(0)
+    expect(new TextDecoder().decode(placeholderResult.stdout)).toStartWith(
+      "data:image/",
+    )
+
+    const base64Result = await run(input, "--base64", "-")
+    expect(base64Result.exitCode).toBe(0)
+    expect(new TextDecoder().decode(base64Result.stdout)).toStartWith("iVBOR")
+
+    const dataurlResult = await run(input, "--dataurl", dataurl)
+    expect(dataurlResult.exitCode).toBe(0)
+    expect(await Bun.file(dataurl).text()).toStartWith("data:image/")
+  } finally {
+    await cleanup()
+  }
+})
+
+test("CLI writes explicitly formatted binary output to stdout", async () => {
+  await setup()
+  try {
+    const result = await run(input, "--format", "png", "-")
+    expect(result.exitCode).toBe(0)
+    expect(new TextDecoder().decode(result.stderr)).toBe("")
+    expect(Array.from(result.stdout.slice(0, 8))).toEqual([
+      137, 80, 78, 71, 13, 10, 26, 10,
+    ])
+  } finally {
+    await cleanup()
+  }
+})
+
 test("CLI encodes every supported explicit output format", async () => {
   await setup()
   try {
