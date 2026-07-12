@@ -29,7 +29,7 @@ export async function main() {
     else if (args.terminal === "base64")
       await writeText(
         args.output,
-        `${(format ? applyFormat(image, format, args.quality) : image).toBase64()}\n`,
+        `${await (format ? applyFormat(image, format, args.quality) : image).toBase64()}\n`,
       )
     else if (args.terminal === "dataurl")
       await writeText(

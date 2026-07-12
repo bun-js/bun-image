@@ -59,6 +59,53 @@ test("CLI emits terminal data URL output to stdout", async () => {
   }
 })
 
+test("CLI applies ordered operations and infers the output format", async () => {
+  await setup()
+  try {
+    const output = `${root}/rotated.jpg`
+    const result = await run(
+      input,
+      "--resize",
+      "2x1",
+      "--rotate",
+      "90",
+      "--flip",
+      "--flop",
+      "--brightness",
+      "1",
+      "--saturation",
+      "1",
+      "--quality",
+      "80",
+      output,
+    )
+    expect(result.exitCode).toBe(0)
+
+    const metadata = await run(output, "--metadata", "-")
+    expect(JSON.parse(new TextDecoder().decode(metadata.stdout))).toMatchObject({
+      width: 2,
+      height: 1,
+      format: "jpeg",
+    })
+  } finally {
+    await cleanup()
+  }
+})
+
+test("CLI emits placeholder and Base64 terminal output to files", async () => {
+  await setup()
+  try {
+    const placeholder = `${root}/placeholder.txt`
+    const base64 = `${root}/base64.txt`
+    expect((await run(input, "--placeholder", placeholder)).exitCode).toBe(0)
+    expect((await run(input, "--base64", base64)).exitCode).toBe(0)
+    expect(await Bun.file(placeholder).text()).toStartWith("data:image/")
+    expect(await Bun.file(base64).text()).toStartWith("iVBOR")
+  } finally {
+    await cleanup()
+  }
+})
+
 test("CLI reports invalid arguments through stderr and a nonzero exit", () => {
   const result = Bun.spawnSync([
     "bun",
