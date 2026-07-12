@@ -1,2 +1,11 @@
 [tools]
+biome = "2.5.3"
 bun = "1.3.14"
+"npm:typescript" = "7.0.2"
+
+[tasks.check]
+run = [
+  "bun test",
+  "tsc --noEmit --skipLibCheck",
+  "biome check --write --unsafe"
+]
