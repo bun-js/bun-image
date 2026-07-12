@@ -1,4 +1,5 @@
-export type OutputFormat = "jpeg" | "png" | "webp" | "heic" | "avif"
+export const outputFormats = ["jpeg", "png", "webp", "heic", "avif"] as const
+export type OutputFormat = (typeof outputFormats)[number]
 
 export type Operation =
   | { kind: "resize"; width: number; height?: number }
