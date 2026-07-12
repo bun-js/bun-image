@@ -13,7 +13,10 @@ function run(...args: string[]) {
 
 async function setup() {
   await Bun.$`mkdir -p ${root}`
-  await Bun.write(input, Uint8Array.from(atob(fixture), (char) => char.charCodeAt(0)))
+  await Bun.write(
+    input,
+    Uint8Array.from(atob(fixture), (char) => char.charCodeAt(0)),
+  )
 }
 
 async function cleanup() {
@@ -87,7 +90,9 @@ test("CLI preserves existing output on failure and overwrites on success", async
     expect(run(input, "--unknown", output).exitCode).not.toBe(0)
     expect(await Bun.file(output).text()).toBe("keep me")
     expect(run(input, output).exitCode).toBe(0)
-    expect(await Bun.file(output).bytes()).not.toEqual(new TextEncoder().encode("keep me"))
+    expect(await Bun.file(output).bytes()).not.toEqual(
+      new TextEncoder().encode("keep me"),
+    )
   } finally {
     await cleanup()
   }

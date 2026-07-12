@@ -13,8 +13,37 @@ describe("parseArguments", () => {
       parseArguments(["in.jpg", "--resize", "100", "out.webp"]).operations,
     ).toEqual([{ kind: "resize", width: 100, height: undefined }])
   })
+  test("accepts negative numeric option values", () => {
+    expect(
+      parseArguments([
+        "in.jpg",
+        "--rotate",
+        "-90",
+        "--brightness",
+        "-0.5",
+        "out.webp",
+      ]).operations,
+    ).toEqual([
+      { kind: "rotate", degrees: -90 },
+      { kind: "modulate", brightness: -0.5 },
+    ])
+  })
   test("accepts dash as a terminal destination", () => {
     expect(parseArguments(["in.png", "--metadata", "-"]).output).toBe("-")
+  })
+  test("rejects values attached to boolean options", () => {
+    for (const option of [
+      "clipboard",
+      "metadata",
+      "placeholder",
+      "base64",
+      "dataurl",
+      "flip",
+      "flop",
+    ])
+      expect(() =>
+        parseArguments(["in.png", `--${option}=false`, "out.png"]),
+      ).toThrow(`--${option} does not accept a value`)
   })
   test("parses all scalar and terminal options", () => {
     const args = parseArguments([
@@ -65,8 +94,11 @@ describe("parseArguments", () => {
     expect(() => parseArguments(["in.jpg", "--unknown", "out.png"])).toThrow(
       "unsupported option",
     )
-    expect(() => parseArguments(["in.jpg", "--rotate", "13", "out.png"])).toThrow(
-      "multiple of 90",
+    expect(() =>
+      parseArguments(["in.jpg", "--rotate", "13", "out.png"]),
+    ).toThrow("multiple of 90")
+    expect(() => parseArguments(["in.jpg", "--quality"])).toThrow(
+      "--quality requires a value",
     )
   })
 })

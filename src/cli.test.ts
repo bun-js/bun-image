@@ -14,7 +14,10 @@ async function run(...args: string[]) {
 
 async function setup() {
   await Bun.$`mkdir -p ${root}`
-  await Bun.write(input, Uint8Array.from(atob(fixture), (char) => char.charCodeAt(0)))
+  await Bun.write(
+    input,
+    Uint8Array.from(atob(fixture), (char) => char.charCodeAt(0)),
+  )
 }
 
 async function cleanup() {
@@ -31,14 +34,18 @@ test("CLI converts images and reports metadata through the process boundary", as
 
     const metadata = await run(input, "--metadata", "-")
     expect(metadata.exitCode).toBe(0)
-    expect(JSON.parse(new TextDecoder().decode(metadata.stdout))).toMatchObject({
-      width: 4,
-      height: 2,
-      format: "png",
-    })
+    expect(JSON.parse(new TextDecoder().decode(metadata.stdout))).toMatchObject(
+      {
+        width: 4,
+        height: 2,
+        format: "png",
+      },
+    )
 
     const resizedMetadata = await run(output, "--metadata", "-")
-    expect(JSON.parse(new TextDecoder().decode(resizedMetadata.stdout))).toMatchObject({
+    expect(
+      JSON.parse(new TextDecoder().decode(resizedMetadata.stdout)),
+    ).toMatchObject({
       width: 2,
       height: 1,
       format: "webp",
@@ -53,7 +60,9 @@ test("CLI emits terminal data URL output to stdout", async () => {
   try {
     const result = await run(input, "--dataurl", "-")
     expect(result.exitCode).toBe(0)
-    expect(new TextDecoder().decode(result.stdout)).toStartWith("data:image/png;base64,")
+    expect(new TextDecoder().decode(result.stdout)).toStartWith(
+      "data:image/png;base64,",
+    )
   } finally {
     await cleanup()
   }
@@ -82,11 +91,13 @@ test("CLI applies ordered operations and infers the output format", async () => 
     expect(result.exitCode).toBe(0)
 
     const metadata = await run(output, "--metadata", "-")
-    expect(JSON.parse(new TextDecoder().decode(metadata.stdout))).toMatchObject({
-      width: 2,
-      height: 1,
-      format: "jpeg",
-    })
+    expect(JSON.parse(new TextDecoder().decode(metadata.stdout))).toMatchObject(
+      {
+        width: 2,
+        height: 1,
+        format: "jpeg",
+      },
+    )
   } finally {
     await cleanup()
   }
