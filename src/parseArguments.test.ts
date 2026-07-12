@@ -65,5 +65,8 @@ describe("parseArguments", () => {
     expect(() => parseArguments(["in.jpg", "--unknown", "out.png"])).toThrow(
       "unsupported option",
     )
+    expect(() => parseArguments(["in.jpg", "--rotate", "13", "out.png"])).toThrow(
+      "multiple of 90",
+    )
   })
 })

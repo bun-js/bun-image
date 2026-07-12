@@ -65,9 +65,12 @@ export function parseArguments(argv: string[]): Arguments {
       continue
     }
     if (arg === "--rotate") {
+      const degrees = number(take(i++, arg), "rotation")
+      if (degrees % 90 !== 0)
+        throw new Error("rotation must be a multiple of 90 degrees")
       operations.push({
         kind: "rotate",
-        degrees: number(take(i++, arg), "rotation"),
+        degrees,
       })
       continue
     }
